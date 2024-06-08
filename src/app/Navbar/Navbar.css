@@ -1,0 +1,49 @@
+.nb-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 40px;
+}
+
+.nb-title {
+  font-size: 2rem;
+  font-family: cursive;
+  font-weight: 900;
+}
+
+.nb-btn {
+  background: none;
+  border-radius: 30px;
+  border: 0;
+  cursor: pointer;
+  font-family: "Open Sans", sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  outline: 0;
+  padding: 15px 25px;
+  transition: background-color 0.5s ease;
+}
+
+.nb-selected-btn {
+  font-weight: 600;
+  background-color: #0d0c22;
+  color: white;
+}
+
+.nb-selected-btn:hover {
+  background-color: #0d0c22bd;
+}
+
+@media only screen and (max-width: 600px) {
+  .nb-title {
+    font-size: 1.6rem;
+  }
+  .nb-container {
+    padding: 10px 20px;
+  }
+
+  .nb-btn {
+    font-size: 0.8rem;
+    padding: 8px 18px;
+  }
+}

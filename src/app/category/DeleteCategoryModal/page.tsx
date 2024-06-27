@@ -1,3 +1,4 @@
+"use client";
 import { useState } from "react";
 import { MdDeleteOutline } from "react-icons/md";
 import { RiDeleteBin5Line } from "react-icons/ri";
@@ -21,13 +22,13 @@ const DeleteCategoryModal = () => {
 
     const handleClick = async (category_id: string, category_title: string) => {
         try {
-            await axios.post('/api/task/deleteAll', { user_id: user!._id, category_id });
-            await axios.post('/api/category/delete', { user_id: user!._id,category_title });
+            await axios.post('/api/task/deleteAll', { user_id: user?._id, category_id });
+            await axios.post('/api/category/delete', { user_id: user?._id, title: category_title });
             const categorySet = categories.filter(item => item.title !== category_title);
             setCategories(categorySet);
             toast.success(`${category_title} deleted successfully!`);
         } catch (error: any) {
-            console.error("Error deleting category:", error.message);
+            // console.error("Error deleting category:", error.message);
             toast.error(`Failed to delete ${category_title}`);
         }
     };
@@ -77,14 +78,14 @@ const DeleteCategoryModal = () => {
                             <div className="my-5 flex flex-col gap-2">
                                 {categories?.map((item: any) => (
                                     <p
-                                        key={item.id}
+                                        key={item._id}
                                         className="border border-gray-200 p-3 rounded-md"
                                     >
                                         <span className="flex flex-row justify-between">
                                             <span>{item.title}</span>
                                             <button
                                                 className="bg-red-100 p-1 rounded-md text-red-600 cursor-pointer"
-                                                onClick={() => handleClick(item.id, item.title)}
+                                                onClick={() => handleClick(item._id, item.title)}
                                             >
                                                 <RiDeleteBin5Line />
                                             </button>

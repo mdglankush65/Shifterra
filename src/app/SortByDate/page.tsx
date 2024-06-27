@@ -1,3 +1,4 @@
+"use client";
 import { useState } from "react";
 // import kraftbaseStore, { TaskType } from "@/app/store";
 // import { sortTasksAscending, sortTasksDescending } from "@/service/helper";

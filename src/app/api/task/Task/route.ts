@@ -6,10 +6,13 @@ export async function POST(request: NextRequest) {
     try {
         await connect();
         const reqBody = await request.json();
-        const { user_id, category_id } = reqBody;
-        console.log("Yha tak aa rha h => user_id ",user_id," category_id ",category_id);
-        const tasks = await Task.find({ user_id,category_id });
-        // const tasks = await Task.find({ user_id,category_id });
+        const { _id, user_id, category_id } = reqBody;
+        let query;
+        if(_id)
+            query={_id};
+        else
+            query = { user_id, category_id };
+        const tasks = await Task.find(query);
 
         if (!tasks) {
             return NextResponse.json({

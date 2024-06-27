@@ -1,3 +1,4 @@
+"use client";
 import { useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
@@ -31,7 +32,7 @@ const CreateCategoryModal = () => {
             }
             const response = await axios.post('/api/category/create', newCategory);
             saveCategories();
-            console.log(response);
+
             closeModal();
             toast.success("Category added successfully!");
         } catch (error: any) {

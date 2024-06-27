@@ -18,7 +18,7 @@ export async function POST(request: NextRequest) {
         });
 
         const savedCategory = await newCategory.save();
-        console.log("backend - ", savedCategory)
+        
         return NextResponse.json({
             message: "Category created Successfully",
             success: true,
@@ -26,7 +26,6 @@ export async function POST(request: NextRequest) {
         });
 
     } catch (error: any) {
-        console.log("yha nhi aana tha")
         return NextResponse.json({ error: error.message }, { status: 500 });
     }
 }

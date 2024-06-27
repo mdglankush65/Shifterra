@@ -8,12 +8,15 @@ import Image from 'next/image';
 import axios from 'axios';
 import LoginImage from '@/../public/assets/Sign-In-Animation.gif'
 import kraftbaseStore from '@/app/store';
+import Link from "next/link";
+import Shimmer from "../shimmer";
 
 type SignInFormData = z.infer<typeof SignInSchema>;
 
 const LoginPage = () => {
     const setUserData = kraftbaseStore(state => state.setUser);
     const router = useRouter();
+    const [loading, setLoading] = useState(false);
     const [errors, setErrors] = useState<{ [key: string]: string }>({});
     const [user, setUser] = useState<SignInFormData>({
         email: "",
@@ -22,6 +25,7 @@ const LoginPage = () => {
     
     const onLogin = async () => {
         try {
+            setLoading(true);
             const validation = SignInSchema.safeParse(user);
 
             if (!validation.success) {
@@ -31,18 +35,20 @@ const LoginPage = () => {
                     const field = error.path[0];
                     newErrors[field] = error.message;
                 });
-
+                setLoading(false);
                 setErrors(newErrors);
                 return;
             }
-            const response = await axios.post('api/users/login',user);
-            console.log(response);
+            await axios.post('api/users/login',user);
             const res = await axios.get('/api/users/user');
+            setLoading(false);
             setUserData(res.data.user);
             router.push(`/`);
             toast.success("User successfully logged in!");
 
         } catch (error:any) {
+            setLoading(false);
+            toast.error("User login error ")
             console.log("There is some error in logging In ",error.message);
         }
     }
@@ -53,11 +59,12 @@ const LoginPage = () => {
 
         setUser((prevData) => ({ ...prevData, [name]: value }));
     };
-
+    if(loading)
+        return <Shimmer/>
     return (
-        <div className="flex justify-center">
+        <div className="flex justify-center h-full-screen">
             <div className="sp-grid grid grid-rows-1 grid-cols-1 lg:grid-cols-2 p-10 w-full md:w-10/12">
-                <div className="gif-box  hidden lg:block rounded-lg">
+                <div className="gif-box  hidden lg:block rounded-lg  w-full-screen">
                     <Image src={LoginImage} alt="SignInImage" />
                 </div>
                 <div className="sp-form-box  flex flex-col justify-center items-center">
@@ -96,12 +103,15 @@ const LoginPage = () => {
                         </div>
                         <div className="btn-signup">
                             <button
-                                className="shadow bg-custom-navy-blue focus:shadow-outline focus:outline-none text-black font-bold p-2 md:p-4 rounded-full w-full  mt-3 md:mt-5 hover:bg-custom-navy-blue-hover"
+                                className="shadow bg-custom-navy-blue focus:shadow-outline focus:outline-none text-black border border-gray-300 font-bold p-2 md:p-4 rounded-full w-full  mt-3 md:mt-5 hover:bg-custom-navy-blue-hover"
                                 onClick={onLogin}
                             >
                                 Sign in
                             </button>
                         </div>
+                        <p>New User?
+                            <Link href="/signUp" className="text-blue-700">Sign Up</Link>
+                        </p>
                     </div>
                 </div>
             </div>

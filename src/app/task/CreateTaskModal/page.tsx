@@ -1,6 +1,7 @@
+"use client";
 import React, { useState } from "react";
 import { MdPlaylistAdd } from "react-icons/md";
-import { z } from "zod";
+import { boolean, z } from "zod";
 import { TaskFormSchema } from "@/validation/validate";
 import toast from "react-hot-toast";
 import axios from "axios";
@@ -8,12 +9,11 @@ import kraftbaseStore from "@/app/store";
 
 type FormDataType = z.infer<typeof TaskFormSchema>;
 
-const CreateTaskModal = () => {
+const CreateTaskModal = ({ setRefresh }: { setRefresh: (value: boolean | ((prevState: boolean) => boolean)) => void }) => {
     const [isOpen, setIsOpen] = useState<boolean>(false);
     const [errors, setErrors] = useState<{ [key: string]: string }>({});
     const user = kraftbaseStore((state) => state.user);
     const categories = kraftbaseStore((state) => state.categories);
-    const saveTasks = kraftbaseStore((state) => state.saveTasks);
     const [taskFormData, setTaskFormData] = useState<FormDataType>({
         title: "",
         description: "",
@@ -44,13 +44,13 @@ const CreateTaskModal = () => {
                 setErrors(newErrors);
                 return;
             }
-            const newTask= {
+            const newTask = {
                 user_id: user!._id,
                 category_id: taskFormData.category,
                 ...taskFormData
             }
             await axios.post('/api/task/create', newTask);
-            saveTasks(taskFormData.category);
+            setRefresh(prev=>!prev);
             closeModal();
             setTaskFormData({
                 title: "",
@@ -61,7 +61,7 @@ const CreateTaskModal = () => {
             toast.success("Task added successfully!");
         } catch (error: any) {
             toast.error("Error in adding task");
-            throw new Error(error.message);
+            console.log(error.message);
         }
     };
 

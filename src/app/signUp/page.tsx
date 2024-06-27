@@ -6,12 +6,15 @@ import toast from "react-hot-toast";
 import axios from 'axios';
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import Link from "next/link";
 import SignUpImage from '@/../public/assets/Sign-Up-Animation.gif'
+import Shimmer from "../shimmer";
 
 type SignupUser = z.infer<typeof SignUpSchema>;
 
 const SignupPage = () => {
     const router = useRouter();
+    const [loading,setLoading] = useState(false);
     const [user, setUser] = useState<SignupUser>({
         email: "",
         username: "",
@@ -20,6 +23,7 @@ const SignupPage = () => {
 
     const onSignUp = async () => {
         try {
+            setLoading(true);
             const validation = SignUpSchema.safeParse(user);
 
             if (!validation.success) {
@@ -31,14 +35,17 @@ const SignupPage = () => {
                 });
 
                 setErrors(newErrors);
+                setLoading(false);
                 return;
             }
 
-            const response = await axios.post('api/users/signUp', user);
+            await axios.post('api/users/signUp', user);
             router.push('/login');
+            setLoading(false);
             toast.success("User created successfully. Please Login!");
         } catch (error: any) {
             toast.error("Something went wrong!");
+            setLoading(false);
             console.log("Error on Signing up ", error.message);
         }
     }
@@ -49,6 +56,9 @@ const SignupPage = () => {
         setErrors({});
         setUser((prevData) => ({ ...prevData, [name]: value }));
     };
+
+    if(loading)
+        return <Shimmer/>
 
     return (
         <div className="flex justify-center">
@@ -114,12 +124,16 @@ const SignupPage = () => {
                         </div>
                         <div className="btn-signup">
                             <button
-                                className="shadow bg-custom-navy-blue focus:shadow-outline focus:outline-none text-black font-bold p-2 md:p-4 rounded-full w-full mt-3 md:mt-5 hover:bg-custom-navy-blue-hover"
+                                className="shadow bg-custom-navy-blue focus:shadow-outline focus:outline-none text-black
+                                border border-gray-300 font-bold p-2 md:p-4 rounded-full w-full mt-3 md:mt-5 hover:bg-custom-navy-blue-hover"
                                 onClick={onSignUp}
                             >
                                 Create Account
                             </button>
                         </div>
+                        <p>Already have account?
+                            <Link href="/login" className="text-blue-700">Sign In</Link>
+                        </p>
                     </div>
                 </div>
             </div>

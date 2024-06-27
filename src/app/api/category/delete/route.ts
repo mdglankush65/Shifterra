@@ -9,7 +9,7 @@ export async function POST(request: NextRequest) {
         const { user_id, title } = reqBody;
 
         const category = await Category.findOneAndDelete({ user_id, title });
-
+        
         if (!category) {
             return NextResponse.json({
                 message: "Category not found",

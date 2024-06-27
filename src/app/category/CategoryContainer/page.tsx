@@ -1,7 +1,10 @@
-import { useEffect } from "react";
-import TaskCard from "@/app/task/Task/page"; 
+"use client";
+import { useEffect, useState } from "react";
+import TaskCard from "@/app/task/Task/page";
 // import { SortableContext } from "@dnd-kit/sortable";
-import kraftbaseStore,{TaskType} from "@/app/store";
+import kraftbaseStore, { TaskType } from "@/app/store";
+import axios from 'axios';
+import toast from "react-hot-toast";
 
 // Custom sorting strategy to prevent dragging
 const noSortingStrategy = () => ({
@@ -11,19 +14,64 @@ const noSortingStrategy = () => ({
     scaleY: 1,
 });
 
-const CategoryContainer = ({ category_id, categoryTitle }: { category_id: string, categoryTitle: string }) => {
-    const tasks = kraftbaseStore(state => state.tasks);
-    const saveTasks = kraftbaseStore(state => state.saveTasks);
+const CategoryContainer = ({ categoryTitle, category_id, refresh }: {categoryTitle:string, category_id:string, refresh: boolean}) => {
+    const [tasks, setTasks] = useState([]);
+    const user = kraftbaseStore(state => state.user);
+
+    const fetchTasks = async () => {
+        try {
+            const response = await axios.post('/api/task/Task', { user_id: user?._id, category_id });
+
+            setTasks(response.data.tasks);
+            toast.success("Tasks fetched Successfully");
+        } catch (error) {
+            toast.error("Not able to fetch the tasks.");
+            console.log("Error in fetching tasks", error);
+        }
+    }
 
     useEffect(() => {
-        saveTasks(category_id);
-        console.log(tasks);
+        fetchTasks();
+
         // eslint-disable-next-line
-    }, []);
+    }, [refresh]);
+
+    const handleDeleteClick = async (_id: string) => {
+        try {
+            const taskRes = await axios.post('/api/task/delete', { _id });
+
+            toast.success("Task deleted");
+            fetchTasks();
+        } catch (error: any) {
+            toast.error("Failed to delete task");
+            console.error("Error deleting task:", error.message);
+        }
+    };
+
+    const handleIsTaskComplete = async ({
+        _id,
+        user_id,
+        category_id,
+        title,
+        description,
+        date,
+        isCompleted }: TaskType) => {
+        try {
+            const taskRes = await axios.post('/api/task/update', {
+                user_id, category_id, _id, title, description, date, isCompleted: !isCompleted
+            });
+
+            toast.success("Task Updated");
+            fetchTasks();
+        } catch (error: any) {
+            toast.error("Task failed to Update")
+            console.error("Error updating task:", error.message);
+        }
+    };
 
     return (
         tasks.length > 0 && (
-            <div className="shadow-md p-5 mx-0 md:mx-12 lg:mx-16 rounded-2xl border-2 border-gray-200">
+            <div className="shadow-md p-2 mx-0 md:mx-2 lg:mx-2 rounded-2xl border-2 border-gray-200">
                 <div className="flex flex-row gap-2 items-center text-slate-600">
                     <h2 className="text-xl md:text-2xl font-semibold">{categoryTitle}</h2>
                     <p className="text-xs md:text-sm">{`(${tasks.length})`}</p>
@@ -34,6 +82,8 @@ const CategoryContainer = ({ category_id, categoryTitle }: { category_id: string
                         <TaskCard
                             key={task._id}
                             {...task}
+                            handleDeleteClick={() => handleDeleteClick(task._id)}
+                            handleIsTaskComplete={() => handleIsTaskComplete(task)}
                         />
                     ))}
                     {/* </SortableContext> */}

@@ -7,7 +7,7 @@ export async function POST(request: NextRequest) {
         await connect();
         const reqBody = await request.json();
 
-        const { user_id, category_id, _id, title, description, date, isCompleted } = reqBody;
+        const { _id, new_category_id } = reqBody;
 
         // Find the old task data before updating
         const oldTask = await Task.findOne({ _id });
@@ -18,10 +18,10 @@ export async function POST(request: NextRequest) {
         // Update task with the new data
         const updatedTask = await Task.findOneAndUpdate(
             { _id },
-            { user_id, category_id, title, description, date, isCompleted },
+            { category_id: new_category_id },
             { new: true } // Returns the updated document
         );
-
+        
         return NextResponse.json({
             message: "Task updated successfully",
             success: true,

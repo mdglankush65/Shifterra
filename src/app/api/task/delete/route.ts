@@ -6,8 +6,10 @@ export async function POST(request: NextRequest) {
     try {
         await connect();
         const reqBody = await request.json();
-        const { user_id, category_id, title } = reqBody;
-        const task = await Task.findOneAndDelete({ user_id, category_id, title });
+        const { _id } = reqBody;
+
+        const task = await Task.findOneAndDelete({ _id });
+
         if (!task)
             return NextResponse.json({ error: "Task not exists." }, { status: 400 });
 

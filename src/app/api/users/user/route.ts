@@ -9,7 +9,7 @@ export async function GET(request:NextRequest){
     try {
         const userId:String = await getDataFromToken(request);
 
-        const user = await User.findById(userId).select("username");
+        const user = await User.findById(userId).select("username email");
 
         return NextResponse.json({ message: 'Successfully got the data', success:true, user }, { status: 201 });
     } catch (error:any) {

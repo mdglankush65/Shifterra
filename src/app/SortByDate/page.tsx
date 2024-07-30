@@ -1,28 +1,27 @@
 "use client";
 import { useState } from "react";
-// import kraftbaseStore, { TaskType } from "@/app/store";
-// import { sortTasksAscending, sortTasksDescending } from "@/service/helper";
+import kraftbaseStore, { CategoryType } from "@/app/store";
+import { sortCategoriesAscending, sortCategoriesDescending } from "@/service/helper";
 
 const SortByDate = () => {
     const [selectedSort, setSelectedSort] = useState<string>("Sort task by date");
-    // const tasks = kraftbaseStore((s) => s.tasks);
-    // const saveTasks = kraftbaseStore((s) => s.saveTasks);
+    const categories = kraftbaseStore((s) => s.categories);
+    const setCategories = kraftbaseStore((s) => s.setCategories)
 
     const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const selectedOrder = e.target.value || "Sort task by date";
         setSelectedSort(selectedOrder);
 
-        // let updatedTasks: TaskType[];
+        let updatedCategories;
 
-        // if (selectedOrder === "Ascending order") {
-        //     updatedTasks = sortTasksAscending([...tasks]);
-        // } else if (selectedOrder === "Descending order") {
-        //     updatedTasks = sortTasksDescending([...tasks]);
-        // } else {
-        //     updatedTasks = tasks;
-        // }
-
-        // saveTasks(updatedTasks);
+        if (selectedOrder === "Ascending order") {
+            updatedCategories = sortCategoriesAscending([...categories]);
+        } else if (selectedOrder === "Descending order") {
+            updatedCategories = sortCategoriesDescending([...categories]);
+        } else {
+            updatedCategories = categories;
+        }
+        setCategories(updatedCategories);
     };
 
     return (

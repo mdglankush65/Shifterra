@@ -6,8 +6,8 @@ import toast from "react-hot-toast";
 import kraftbaseStore from "../store";
 
 const Navbar = () => {
-    const user = kraftbaseStore(state=> state.user);
-    const setUser = kraftbaseStore(state=> state.setUser);
+    const user = kraftbaseStore(state => state.user);
+    const setUser = kraftbaseStore(state => state.setUser);
     const router = useRouter();
 
     const onLogout = async () => {
@@ -16,14 +16,14 @@ const Navbar = () => {
             toast.success("Logged out successfully!");
             router.push('/login');
             setUser(null);
-        } catch (error:any) {
+        } catch (error: any) {
             console.log({ error: error.message }, { status: 500 });
         }
     };
 
     return (
         <div className="nb-container">
-            <p className="nb-title">KraftBase</p>
+            <p className="nb-title">Shifterra</p>
             <div className="nb-btn-group flex">
                 <button className={`nb-btn nb-selected-btn`} onClick={onLogout}>
                     Log out

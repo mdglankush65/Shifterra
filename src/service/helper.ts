@@ -1,4 +1,8 @@
-import { TaskType } from "./defaultData";
+import { z } from "zod";
+import { TaskSchema, CategorySchema } from "@/validation/validate";
+
+export type TaskType = z.infer<typeof TaskSchema>;
+export type CategoryType = z.infer<typeof CategorySchema>;
 
 export const getDateInString = (isModified: Boolean): string => {
   const currentDate = new Date();
@@ -43,5 +47,17 @@ export const sortTasksDescending = (tasks: TaskType[]): TaskType[] => {
     const dateA = new Date(a.date.split("/").reverse().join("/"));
     const dateB = new Date(b.date.split("/").reverse().join("/"));
     return dateB.getTime() - dateA.getTime(); // Use getTime() to compare dates
+  });
+};
+
+export const sortCategoriesAscending = (categories: CategoryType[]): CategoryType[] => {
+  return categories.sort((a: CategoryType, b: CategoryType) => {
+    return a.title.localeCompare(b.title);
+  });
+};
+
+export const sortCategoriesDescending = (categories: CategoryType[]): CategoryType[] => {
+  return categories.sort((a: CategoryType, b: CategoryType) => {
+    return b.title.localeCompare(a.title);
   });
 };

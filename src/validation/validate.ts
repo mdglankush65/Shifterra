@@ -22,7 +22,7 @@ export const SignInSchema = z.object({
 
 export const CategorySchema = z.object({
     user_id: z.string(),
-    category_id: z.string().min(1).max(50),
+    _id: z.string().min(1).max(50),
     title: z.string().min(3).max(50),
 });
 

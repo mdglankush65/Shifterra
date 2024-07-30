@@ -16,6 +16,15 @@
   }
 }
 
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.grid-container>.grid-item:nth-last-child(1):nth-child(odd) {
+  grid-column: span 2;
+}
 /* body {
   color: rgb(var(--foreground-rgb));
   background: linear-gradient(

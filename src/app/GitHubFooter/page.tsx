@@ -9,7 +9,7 @@ const GitHubFooter = () => {
                     <FaRegCopyright fontSize={13} />
                 </p>
                 <p>
-                    2024 KraftBase :{" "}
+                    2024 Shifterra :{" "}
                     <a href="https://github.com/mdglankush65" target="_blank">
                         Ankush Mudgil
                     </a>

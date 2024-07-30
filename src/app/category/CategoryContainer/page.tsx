@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import TaskCard from "@/app/task/Task/page";
-// import { SortableContext } from "@dnd-kit/sortable";
+import { SortableContext } from "@dnd-kit/sortable";
 import kraftbaseStore, { TaskType } from "@/app/store";
 import axios from 'axios';
 import toast from "react-hot-toast";
@@ -14,7 +14,7 @@ const noSortingStrategy = () => ({
     scaleY: 1,
 });
 
-const CategoryContainer = ({ categoryTitle, category_id, refresh }: {categoryTitle:string, category_id:string, refresh: boolean}) => {
+const CategoryContainer = ({ categoryTitle, category_id, refresh }: { categoryTitle: string, category_id: string, refresh: boolean }) => {
     const [tasks, setTasks] = useState([]);
     const user = kraftbaseStore(state => state.user);
 
@@ -71,13 +71,13 @@ const CategoryContainer = ({ categoryTitle, category_id, refresh }: {categoryTit
 
     return (
         tasks.length > 0 && (
-            <div className="shadow-md p-2 mx-0 md:mx-2 lg:mx-2 rounded-2xl border-2 border-gray-200">
-                <div className="flex flex-row gap-2 items-center text-slate-600">
+            <div className="shadow-md p-2 pt-0 mx-0 md:mx-2 lg:mx-1 rounded-2xl border-2 border-gray-200 h-60 overflow-y-auto">
+                <div className="sticky bg-white top-0 flex flex-row gap-2 items-center text-slate-600">
                     <h2 className="text-xl md:text-2xl font-semibold">{categoryTitle}</h2>
                     <p className="text-xs md:text-sm">{`(${tasks.length})`}</p>
                 </div>
-                <div className="tasks py-5 px-0 md:px-8 lg:px-10 flex flex-col gap-2">
-                    {/* <SortableContext items={tasks} strategy={noSortingStrategy}> */}
+                <div className="tasks py-5 px-0 md:px-8 lg:px-3 flex flex-col gap-2">
+                    <SortableContext items={tasks} strategy={noSortingStrategy}>
                     {tasks.map((task: TaskType) => (
                         <TaskCard
                             key={task._id}
@@ -86,7 +86,7 @@ const CategoryContainer = ({ categoryTitle, category_id, refresh }: {categoryTit
                             handleIsTaskComplete={() => handleIsTaskComplete(task)}
                         />
                     ))}
-                    {/* </SortableContext> */}
+                    </SortableContext>
                 </div>
             </div>
         )

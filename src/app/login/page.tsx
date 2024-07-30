@@ -22,7 +22,7 @@ const LoginPage = () => {
         email: "",
         password: "",
     });
-    
+
     const onLogin = async () => {
         try {
             setLoading(true);
@@ -39,17 +39,17 @@ const LoginPage = () => {
                 setErrors(newErrors);
                 return;
             }
-            await axios.post('api/users/login',user);
+            await axios.post('api/users/login', user);
             const res = await axios.get('/api/users/user');
             setLoading(false);
             setUserData(res.data.user);
             router.push(`/`);
             toast.success("User successfully logged in!");
 
-        } catch (error:any) {
+        } catch (error: any) {
             setLoading(false);
             toast.error("User login error ")
-            console.log("There is some error in logging In ",error.message);
+            console.log("There is some error in logging In ", error.message);
         }
     }
 
@@ -59,8 +59,8 @@ const LoginPage = () => {
 
         setUser((prevData) => ({ ...prevData, [name]: value }));
     };
-    if(loading)
-        return <Shimmer/>
+    if (loading)
+        return <Shimmer />
     return (
         <div className="flex justify-center h-full-screen">
             <div className="sp-grid grid grid-rows-1 grid-cols-1 lg:grid-cols-2 p-10 w-full md:w-10/12">
@@ -103,7 +103,7 @@ const LoginPage = () => {
                         </div>
                         <div className="btn-signup">
                             <button
-                                className="shadow bg-custom-navy-blue focus:shadow-outline focus:outline-none text-black border border-gray-300 font-bold p-2 md:p-4 rounded-full w-full  mt-3 md:mt-5 hover:bg-custom-navy-blue-hover"
+                                className={`shadow bg-custom-navy-blue focus:shadow-outline focus:outline-none text-black border border-gray-300 font-bold p-2 md:p-4 rounded-full w-full mt-3 md:mt-5 hover:bg-custom-navy-blue-hover ${loading && "visibility:hidden"}`}
                                 onClick={onLogin}
                             >
                                 Sign in
@@ -112,10 +112,10 @@ const LoginPage = () => {
                         <p>New User?
                             <Link href="/signUp" className="text-blue-700">Sign Up</Link>
                         </p>
-                    </div>
                 </div>
             </div>
         </div>
+        </div >
     );
 };
 

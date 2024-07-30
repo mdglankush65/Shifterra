@@ -18,7 +18,7 @@ const CategoryContainer = ({ categoryTitle, category_id, refresh }: { categoryTi
     const [tasks, setTasks] = useState([]);
     const user = kraftbaseStore(state => state.user);
 
-    const fetchTasks = async () => {
+    async function fetchTasks(){
         try {
             const response = await axios.post('/api/task/Task', { user_id: user?._id, category_id });
 
@@ -36,7 +36,7 @@ const CategoryContainer = ({ categoryTitle, category_id, refresh }: { categoryTi
         // eslint-disable-next-line
     }, [refresh]);
 
-    const handleDeleteClick = async (_id: string) => {
+    async function handleDeleteClick(_id: string){
         try {
             const taskRes = await axios.post('/api/task/delete', { _id });
 
@@ -48,14 +48,14 @@ const CategoryContainer = ({ categoryTitle, category_id, refresh }: { categoryTi
         }
     };
 
-    const handleIsTaskComplete = async ({
+    async function handleIsTaskComplete({
         _id,
         user_id,
         category_id,
         title,
         description,
         date,
-        isCompleted }: TaskType) => {
+        isCompleted }: TaskType){
         try {
             const taskRes = await axios.post('/api/task/update', {
                 user_id, category_id, _id, title, description, date, isCompleted: !isCompleted
@@ -70,11 +70,11 @@ const CategoryContainer = ({ categoryTitle, category_id, refresh }: { categoryTi
     };
 
     return (
-        tasks.length > 0 && (
+        tasks?.length > 0 && (
             <div className="shadow-md p-2 pt-0 mx-0 md:mx-2 lg:mx-1 rounded-2xl border-2 border-gray-200 h-60 overflow-y-auto">
                 <div className="sticky bg-white top-0 flex flex-row gap-2 items-center text-slate-600">
                     <h2 className="text-xl md:text-2xl font-semibold">{categoryTitle}</h2>
-                    <p className="text-xs md:text-sm">{`(${tasks.length})`}</p>
+                    <p className="text-xs md:text-sm">{`(${tasks?.length})`}</p>
                 </div>
                 <div className="tasks py-5 px-0 md:px-8 lg:px-3 flex flex-col gap-2">
                     <SortableContext items={tasks} strategy={noSortingStrategy}>

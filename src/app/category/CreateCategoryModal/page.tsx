@@ -24,7 +24,7 @@ const CreateCategoryModal = () => {
 
     const handleSubmit = async () => {
         try {
-            if (categoryTitle.length < 3)
+            if (categoryTitle?.length < 3)
                 return setErrors("Category length should be of 3 character(s).");
             const newCategory = {
                 user_id: user!._id,

@@ -1,3 +1,4 @@
+"use client";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { RiDeleteBin5Line } from "react-icons/ri";
@@ -17,11 +18,11 @@ const TaskCard = ({
     handleIsTaskComplete
 }: TaskType & { handleDeleteClick: () => void, handleIsTaskComplete: () => void }) => {
     const { attributes, listeners, setNodeRef, transform, transition } =
-        useSortable({ id: _id.toString() });
+        useSortable({ id: _id?.toString() });
 
     const style = {
         transition,
-        transform: CSS.Transform.toString(transform),
+        transform: CSS.Transform?.toString(transform),
     };
 
     return (
@@ -48,19 +49,19 @@ const TaskCard = ({
                         className={`task-title ${isCompleted ? "line-through" : ""
                             } text-slate-700 text-sm md:text-lg`}
                     >
-                        {title.length<15?title:title.slice(0,13)+"..."}
+                        {title?.length<18 ?title:title?.slice(0,17)+"..."}
                     </p>
                 </div>
                 <p
                     className={`task-desc mr-0 md:mr-12 lg:mr-20 break-words ml-8 md:ml-10 mt-1 md:mt-2 text-xs md:text-sm text-slate-400 ${isCompleted ? "line-through" : ""
                         }`}
                 >
-                    {description.length < 15 ?description:description.slice(0, 15) + "..."}
+                    {description?.length < 18 ?description:description?.slice(0, 18) + "..."}
                 </p>
             </div>
             <div className="task-opt flex flex-row items-center justify-end md:justify-normal gap-3 md:gap-5 mt-2 md:mt-0">
                 <p className="task-date text-xs md:text-sm text-slate-600">
-                    {date.toString()}
+                    {date?.toString()}
                 </p>
                 <button
                     className="bg-red-100 p-1 rounded-md text-red-600 cursor-pointer text-xs md:text-md lg:text-lg"

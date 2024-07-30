@@ -35,8 +35,8 @@ const Dashboard = () => {
         try {
             const { active, over } = event;
             if (over) {
-                const over_id = over.id.toString();
-                const active_id = active.id.toString();
+                const over_id = over.id?.toString();
+                const active_id = active.id?.toString();
 
                 const newLoc = await axios.post('/api/task/Task', { _id: over_id });
                 const oldLoc = await axios.post('/api/task/Task', { _id: active_id });
@@ -87,9 +87,9 @@ const Dashboard = () => {
                         >
                             {categories?.map((item: CategoryType) => (
                                 <CategoryContainer
-                                    key={item._id}
-                                    categoryTitle={item.title}
-                                    category_id={item._id}
+                                    key={item!._id}
+                                    categoryTitle={item!.title}
+                                    category_id={item._id || "---"}
                                     refresh={refresh}
                                 />
                             ))}

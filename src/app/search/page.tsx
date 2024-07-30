@@ -1,3 +1,4 @@
+"use client";
 import { useState } from "react";
 import {TaskType} from "@/app/store";
 import { IoSearch } from "react-icons/io5";
